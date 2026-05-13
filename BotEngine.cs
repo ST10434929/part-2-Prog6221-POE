@@ -44,3 +44,12 @@ namespace CybersecurityAwarenessBotGUI
 
             if (input.Contains("privacy"))
                 return responses.GetRandom("privacy");
+
+            // FOLLOW UPS
+            if (input.Contains("tell me more") || input.Contains("another tip"))
+                return responses.GetGenericTip();
+
+            return "I can help with passwords, phishing, scams, and privacy.";
+        }
+    }
+}
