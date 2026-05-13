@@ -20,3 +20,27 @@ namespace CybersecurityAwarenessBotGUI
 
             if (input.Contains("curious"))
                 return "Great! Let’s explore cybersecurity together.";
+
+            // MEMORY
+            if (input.Contains("my name is"))
+            {
+                string name = input.Replace("my name is", "").Trim();
+                memory.SetName(name);
+                return $"Nice to meet you, {name}!";
+            }
+
+            if (input.Contains("what is my name"))
+                return "Your name is " + memory.GetName();
+
+            // KEYWORDS + RANDOM RESPONSES
+            if (input.Contains("password"))
+                return responses.GetRandom("password");
+
+            if (input.Contains("phishing"))
+                return responses.GetRandom("phishing");
+
+            if (input.Contains("scam"))
+                return responses.GetRandom("scam");
+
+            if (input.Contains("privacy"))
+                return responses.GetRandom("privacy");
