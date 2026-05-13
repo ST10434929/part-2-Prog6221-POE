@@ -6,116 +6,54 @@ namespace CybersecurityAwarenessBotGUI
 {
     public partial class Form1 : Form
     {
-        private RichTextBox rtbChat;
-        private TextBox txtUserInput;
-        private Button btnSend;
+        private BotEngine bot = new BotEngine();
+
+        private RichTextBox chat;
+        private TextBox input;
+        private Button send;
 
         public Form1()
         {
             InitializeComponent();
 
-            // FORM SETTINGS
-            this.Text = "Cybersecurity Awareness Bot";
-            this.Width = 800;
-            this.Height = 600;
+            Text = "Cybersecurity Awareness Bot";
+            Width = 800;
+            Height = 600;
 
-            // CHAT BOX
-            rtbChat = new RichTextBox();
-            rtbChat.Width = 750;
-            rtbChat.Height = 400;
-            rtbChat.Top = 10;
-            rtbChat.Left = 10;
-            rtbChat.ReadOnly = true;
+            chat = new RichTextBox() { Width = 750, Height = 400, Top = 10, Left = 10, ReadOnly = true };
+            input = new TextBox() { Width = 600, Top = 420, Left = 10 };
+            send = new Button() { Text = "Send", Top = 420, Left = 620 };
 
-            // INPUT BOX
-            txtUserInput = new TextBox();
-            txtUserInput.Width = 600;
-            txtUserInput.Top = 420;
-            txtUserInput.Left = 10;
+            send.Click += Send_Click;
 
-            // BUTTON
-            btnSend = new Button();
-            btnSend.Text = "Send";
-            btnSend.Top = 418;
-            btnSend.Left = 620;
-            btnSend.Click += BtnSend_Click;
+            Controls.Add(chat);
+            Controls.Add(input);
+            Controls.Add(send);
 
-            // ADD CONTROLS
-            this.Controls.Add(rtbChat);
-            this.Controls.Add(txtUserInput);
-            this.Controls.Add(btnSend);
-
-            // VOICE GREETING 
+            // Voice greeting
             try
             {
-                SoundPlayer player = new SoundPlayer("greeting.wav");
-                player.Play();
+                new SoundPlayer("greeting.wav").Play();
             }
-            catch
-            {
-                MessageBox.Show("Voice file not found or cannot play.");
-            }
+            catch { }
 
-            // WELCOME MESSAGE
-            rtbChat.AppendText("Cybersecurity Awareness Bot Started...\n");
-            rtbChat.AppendText("Ask me about passwords, phishing, scams, privacy.\n\n");
+            chat.AppendText("Bot: Hello! Ask me anything about cybersecurity.\n\n");
         }
 
-        private void BtnSend_Click(object sender, EventArgs e)
+        private void Send_Click(object sender, EventArgs e)
         {
-            string input = txtUserInput.Text.ToLower().Trim();
+            string msg = input.Text.ToLower().Trim();
 
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                MessageBox.Show("Please type something.");
+            if (string.IsNullOrWhiteSpace(msg))
                 return;
-            }
 
-            rtbChat.AppendText("You: " + input + "\n");
+            chat.AppendText("You: " + msg + "\n");
 
-            string response = GetResponse(input);
+            string response = bot.Process(msg);
 
-            rtbChat.AppendText("Bot: " + response + "\n\n");
+            chat.AppendText("Bot: " + response + "\n\n");
 
-            txtUserInput.Clear();
-        }
-        private string GetResponse(string input)
-        {
-            // SENTIMENT DETECTION
-            if (input.Contains("worried"))
-                return "It's okay to feel worried. Let me help you stay safe online.";
-
-            if (input.Contains("frustrated"))
-                return "Cybersecurity can be confusing, but I’ll guide you step by step.";
-
-            if (input.Contains("curious"))
-                return "Great! Curiosity helps you stay safe online.";
-
-            // KEYWORD RESPONSES
-            if (input.Contains("password"))
-                return "Use strong passwords with numbers, symbols, and letters.";
-
-            if (input.Contains("phishing"))
-                return "Phishing is when scammers trick you into giving personal info.";
-
-            if (input.Contains("privacy"))
-                return "Keep your personal information private online.";
-
-            if (input.Contains("scam"))
-                return "Never trust unknown messages asking for money or info.";
-
-            if (input.Contains("malware"))
-                return "Avoid downloading files from untrusted sources.";
-
-            if (input.Contains("vpn"))
-                return "A VPN helps protect your internet connection.";
-
-            // FOLLOW-UP FLOW
-            if (input.Contains("tell me more") || input.Contains("another tip"))
-                return "Sure! Always double-check links before clicking.";
-
-            // DEFAULT RESPONSE
-            return "I’m not sure about that. Try asking about passwords, phishing, scams, or privacy.";
+            input.Clear();
         }
     }
 }
