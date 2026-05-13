@@ -5,18 +5,21 @@ namespace CybersecurityAwarenessBotGUI
     public class ChatMemory
     {
         private List<string> messages = new List<string>();
+        private string userName = "User";
 
         public void Store(string msg)
         {
             messages.Add(msg);
         }
 
-        public string GetLast()
+        public void SetName(string name)
         {
-            if (messages.Count == 0)
-                return "Nothing stored yet.";
+            userName = name;
+        }
 
-            return messages[messages.Count - 1];
+        public string GetName()
+        {
+            return userName;
         }
     }
 }
